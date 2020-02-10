@@ -5,3 +5,6 @@
 2. 添加文件到Git仓库有两步
 	1) git add file_name *可反复多次使用，添加多个文件
 	2) git commit -m "message" *用message中的信息说明本次添加的目的、内容、方法等
+
+3. 掌握工作区的状态，用git status命令，如果有修改过，用 git diff file_name 查看修改内容
+   修改完成后，用同样的方法添加到仓库
