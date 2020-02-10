@@ -1,0 +1,7 @@
+﻿# git 学习笔记
+
+1. 初始化一个仓库，用git init命令
+
+2. 添加文件到Git仓库有两步
+	1) git add file_name *可反复多次使用，添加多个文件
+	2) git commit -m "message" *用message中的信息说明本次添加的目的、内容、方法等
