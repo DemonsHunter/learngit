@@ -8,3 +8,11 @@
 
 3. 掌握工作区的状态，用git status命令，如果有修改过，用 git diff file_name 查看修改内容
    修改完成后，用同样的方法添加到仓库
+
+4. git log 命令可以查看对仓库的屡次更改，可以用git log --pretty=oneline进行精简，便于观察
+
+5. HEAD指向的版本是当前版本，之前的依次为HEAD^,HEAD^^...
+
+6. 如果想要回退版本，调用命令git reset --hard commit_id 其中，版本号输入前几位即可
+
+7. git reflog可以查看命令历史
