@@ -20,3 +20,14 @@
 8. git的内部可分为工作区和版本区，工作区即本电脑上的目录，可以看到文件
    而版本区包括暂存区stage和分支branch，git默认为我们构建了master的分支，其上有一个目前版本的指针HEAD
    每次修改过的内容，通过add命令从工作区进入暂存区，再通过commit命令，将文件方入目前的分支
+   
+9. 撤销工作区的修改: git checkout -- file_name
+   撤销暂存区的修改：git reset HEAD file_name，再用上一步的命令撤回修改
+   撤销暂未推送到远程库的修改：版本回退，即第6步的命令git reset --hard commit_id
+   
+10. 删除文件：首先用rm file_name，删除工作区文件，或者手动删除也可以
+              接下来用git rm file_name命令将文件从版本库中删除，并且用git commit说明
+	如果删错了工作区的文件，可以从版本库中找回：git checkout -- file_name，但是该方法只能恢复到最新版本
+	可能丢失最近一次提交修改后修改的内容
+
+11.
