@@ -1,4 +1,5 @@
 ﻿# git 学习笔记
+一、基本命令
 
 1. 初始化一个仓库，用git init命令
 
@@ -11,7 +12,9 @@
 
 4. git log 命令可以查看对仓库的屡次更改，可以用git log --pretty=oneline进行精简，便于观察
 
-5. HEAD指向的版本是当前版本，之前的依次为HEAD^,HEAD^^...
+5. HEAD指向的版本是当前分支的最新指针，修改分支相当于修改HEAD的指向，之前的依次为HEAD^,HEAD^^...
+
+二、时光机穿梭
 
 6. 如果想要回退版本，调用命令git reset --hard commit_id 其中，版本号输入前几位即可
 
@@ -30,4 +33,52 @@
 	如果删错了工作区的文件，可以从版本库中找回：git checkout -- file_name，但是该方法只能恢复到最新版本
 	可能丢失最近一次提交修改后修改的内容
 
+三、远程仓库
+
 11. 本地修改好的文件，用git push origin master 命令上传到github
+
+12. 克隆仓库命令 git clone git@github.com:user_name/repository_name.git
+
+四、分支管理
+
+13. 基本的分支命令:
+	1) 查看分支 git branch
+	2) 创建分支 git branch branch_name
+	3) 切换分支 git switch branch_name
+	4) 创建+切换 git switch -c branch_name
+	5) 合并某分支到当前分支 git merge branch_name
+	6) 删除分支 git branch -d branch_name
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
