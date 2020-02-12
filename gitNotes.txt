@@ -46,14 +46,81 @@
 	2) 创建分支 git branch branch_name
 	3) 切换分支 git switch branch_name
 	4) 创建+切换 git switch -c branch_name
-	5) 合并某分支到当前分支 git merge branch_name
+	5) 合并某分支到当前分支 git merge branch_name查看远程库信息，使用git remote -v；
+
+本地新建的分支如果不推送到远程，对其他人就是不可见的；
+
+从本地推送分支，使用git push origin branch-name，如果推送失败，先用git pull抓取远程的新提交；
+
+在本地创建和远程分支对应的分支，使用git checkout -b branch-name origin/branch-name，本地和远程分支的名称最好一致；
+
+建立本地分支和远程分支的关联，使用git branch --set-upstream branch-name origin/branch-name；
+
+从远程抓取分支，使用git pull，如果有冲突，要先处理冲突
 	6) 删除分支 git branch -d branch_name
 
+14. 分支冲突：当Git无法自动合并分支时，就必须首先解决冲突。解决冲突后，再提交，合并完成。
 
+    解决冲突就是把Git合并失败的文件手动编辑为我们希望的内容，再提交。
 
+    用git log --graph命令可以看到分支合并图。
 
+15. 分支管理：一般master分支是稳定的，不能在上面干活，要另建一个分支如dev，进行工作
+    
+	其次，每个人新加的内容与dev要采取非快速发送的形式进行连接，以保留原分支的历史信息、开发记录等
+	
+	命令git merge --no-ff -m "message" branch_name
+	
+	可以通过命令git log --graph --pretty=oneline --abbrev-commit 查看屡次合并的图形
 
+16. 工作暂存：对于没有完成的工作，可以用git stash命令暂存，要恢复时，可以先用git stash list查看存储的工作现场
+    再用git stash pop恢复现场，并删除存档
+	
+	如果在一个分支上修复了bug，并想对master分支作同步更新，则用git cherry-pick commit_id进行更新
+	
+17. 查看远程库信息，使用git remote -v；
 
+    本地新建的分支如果不推送到远程，对其他人就是不可见的；
+
+    从本地推送分支，使用git push origin branch-name，如果推送失败，先用git pull抓取远程的新提交；
+
+    在本地创建和远程分支对应的分支，使用git checkout -b branch-name origin/branch-name，本地和远程分支的名称最好一致；
+
+    建立本地分支和远程分支的关联，使用git branch --set-upstream branch-name origin/branch-name；
+
+    从远程抓取分支，使用git pull，如果有冲突，要先处理冲突
+   
+
+18. 多人工作流程：首先，可以试图用git push origin <branch-name>推送自己的修改；
+ 
+    如果推送失败，则因为远程分支比你的本地更新，需要先用git pull试图合并；
+
+	如果合并有冲突，则解决冲突，并在本地提交；
+
+	没有冲突或者解决掉冲突后，再用git push origin <branch-name>推送就能成功
+
+	如果git pull提示no tracking information，则说明本地分支和远程分支的链接关系没有创建，
+	
+	用命令git branch --set-upstream-to <branch-name> origin/<branch-name>。
+
+五、标签管理
+
+19. 标签是commit的别名，因为commit是16进制的8位数，难以记忆和管理，因此通过给commit加标签来管理
+
+20. 基本命令：
+    1）git tag <tagname>用于新建一个标签，默认为HEAD，也可以指定一个commit id；
+
+    2）git tag -a <tagname> -m "blablabla..."可以指定标签信息；
+
+    3）git tag可以查看所有标签。
+	
+	4）git push origin tagname 可以推送一个本地标签
+	
+	5）git push origin --tags  可以推送全部未推送过的本地标签
+	
+	6）git tag -d tagname      可以删除一个本地标签
+	
+	7）git push origin :refs/tags/tagname 可以删除一个远程标签
 
 
 
