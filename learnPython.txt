@@ -37,4 +37,20 @@
 		def f1(a, b, c=0, *args, **kw):
 	或
 		def f2(a, b, c=0, *, d, **kw):
-	
+
+2. 递归函数
+    为了避免递归溢出，可以采取尾递归，
+	即在函数返回的时候，调用自身本身，并且，return语句不能包含运算表达式
+    如普通的阶乘计算，递归表达为：
+	def fact(n):
+		if n==1:
+			return 1
+		return n * fact(n - 1)	
+	采用尾递归，可以优化为如下代码
+	def fact(n):
+		return fact_iter(n, 1)
+
+	def fact_iter(num, product):
+		if num == 1:
+			return product
+		return fact_iter(num - 1, num * product)
