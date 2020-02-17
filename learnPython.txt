@@ -1,0 +1,31 @@
+﻿1. 函数的参数
+	1）默认参数
+		默认参数的使用可以简化函数调用，如将最常用的参数设为默认参数。
+		注意，默认参数必须指向不变对象，如：
+		def add_end(L=[]):
+			L.append('END')
+			return L
+		如果反复直接调用add_end,则列表会保留上一次结果，不断加end，因此正确写法为：
+		def add_end(L=None):
+			if L is None:
+				L = []
+		L.append('END')
+		return L
+		
+	2）可变参数
+		适用于参数个数未知且不定的情况，如计算任意个数的平方和，写法为 *variable_name
+		这样输入的数据会以元组的形式传入，同样，如果要传列表或元组进去，也加 * 即可
+		
+	3）关键字参数
+		关键字参数允许你传入0个或任意个含参数名的参数，这些关键字参数在函数内部自动组装为一个dict
+        e.g.
+		def person(name, age, **kw):
+			print('name:', name, 'age:', age, 'other:', kw)
+		
+		person('Mike', 30, job='teacher')
+	
+	4）命名关键字参数
+		通过命名的方式限制允许输入的关键字参数，如：
+		def person(name, age, *, city, job):
+			print(name, age, city, job)
+		在使用命名参数后，调用时要写变量名，否则会报错
