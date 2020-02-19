@@ -111,25 +111,41 @@
 		即以函数作为参数的函数，如
 		def add(x, y, f):
 			return f(x)+f(y)
-	
-	3)map与reduce
-		首先是map，即把函数f作用到后面可迭代的对象，并返回一个列表L
-		假设f是x*x的效果，如L =map(f, [1,2,3,4,5])
+		以下谈几个例子
+		i)map与reduce
+			首先是map，即把函数f作用到后面可迭代的对象，并返回一个列表L
+			假设f是x*x的效果，如L =map(f, [1,2,3,4,5])
 		
-		其次是reduce，同样是f+iterable的形式，不过其要求f必须可接受两个参数，
-		因为reduce会把函数返回的结果与下一个元素继续套用函数，如
-		reduce(add, [1, 3, 5, 7, 9])
-		可对数列求和
+			其次是reduce，同样是f+iterable的形式，不过其要求f必须可接受两个参数，
+			因为reduce会把函数返回的结果与下一个元素继续套用函数，如
+			reduce(add, [1, 3, 5, 7, 9])
+			可对数列求和
 		
-		如果将map和reduce配合起来，我们可以写一个字符串数字转换为数字的函数
+			如果将map和reduce配合起来，我们可以写一个字符串数字转换为数字的函数
 		
-		from functools import reduce
+			from functools import reduce
 
-		DIGITS = {'0': 0, '1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9}
+			DIGITS = {'0': 0, '1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9}
 
-		def str2int(s):
-			def fn(x, y):
-				return x * 10 + y
-			def char2num(s): 
-				return DIGITS[s]
+			def str2int(s):
+				def fn(x, y):
+					return x * 10 + y
+				def char2num(s): 
+					return DIGITS[s]
 			return reduce(fn, map(char2num, s))
+	
+		ii）fliter
+			其格式与map类似，不过他返回的是使f返回true的元素。如：
+			list(filter(not_empty, ['A', '', 'B', None, 'C', '  ']))
+			只会返回'A','B','C'
+	
+		iii)sorted函数
+			该函数是对对象进行排序，可以通过指名key函数的方法，对对象预处理，从而得到更多的排序方法
+			注意，key函数是对对象的每一个元素进行映射，如
+			
+			L = [('Bob', 75), ('Adam', 92), ('Bart', 66), ('Lisa', 88)]
+			def by_name(t):
+				return t[0]
+			sorted(L, by_name)
+			
+			即可实现依照name进行排序
