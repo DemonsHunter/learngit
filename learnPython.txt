@@ -465,4 +465,59 @@ for i in range(1000):
 		冒号前是函数的参数，可以有多个，冒号后是返回值，只能有一个
 		
 	5）装饰器
-		在函数动态运行期间修改功能的方法
+		在函数动态运行期间修改功能的方法，如@property表示该函数只提供对私有成员的访问，而不能修改
+
+第六章 OOP
+1. 动态添加、修改类的属性：在Python中比较特殊的是，可以动态地为自定义类和对象增加或删除成员，这一点是和很多面向对象程序设计语言不同的，也是Python动态类型特点的一种重要体现。
+class Car:
+    price = 100000                     #定义类属性
+    def __init__(self, c):
+        self.color = c                 #定义实例属性
+
+car1 = Car("Red")                      #实例化对象
+car2 = Car("Blue")
+print(car1.color, Car.price)           #查看实例属性和类属性的值
+Car.price = 110000                     #修改类属性
+Car.name = 'QQ'                        #动态增加类属性
+car1.color = "Yellow"                  #修改实例属性
+print(car2.color, Car.price, Car.name)
+print(car1.color, Car.price, Car.name)
+
+2. python中支持类和实例分别拥有数据成员，前者称为类的数据成员D，后者称为实例的数据成员d1，d2...
+   实例可以访问D，也可以修改D，并且各个实例修改的D互相独立；实例可以新增、删除d1、d2，各个实例的数据成员也彼此独立
+   相反地，类只能访问D，不能访问d
+   
+3. python也可以动态为对象添加方法，首先把新方法写好：
+def speed(self, s):
+    self.speed = s
+	然后 对象名.函数名 = types.MethodType(函数名,对象名)，例：
+	car1.speed = types.MethodType(speed,car1)
+	
+4. 继承：子类想调用父类的函数时，父类在初始化时必须先继承object，其次使用 super(子类名,self).继承的函数名(参数）
+
+5. 多态：子类可以重写父类的方法，实现多态性   
+
+6. 构造函数__init__与析构函数__del__，如果用户没有定义，就会使用系统默认的构造和析构函数
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
