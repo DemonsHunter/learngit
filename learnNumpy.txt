@@ -13,3 +13,23 @@
 6. 输出矩阵的多个元素(i1, j1) (i2, j2) (i3, j3)... :print(a[[i1, i2, i3], [j1, j2, j3]])，不过输出内容是列表
 
 7. 在上述方法上进行改进，如输出0--n-1行，(j1,j2...jn)列的数据，则 print(np.arrange(n), [j1, j2...jn]]) 该方法也能访问对应下标的元素，并进行修改、操作
+
+8. 加：np.add    减：np.substract 乘: np.dot，     对应位置相乘：*或np.multiply 除：np.divice 
+   开根号np.sqrt 转置x.T          求e次幂 np.exp() 正弦、余弦:np.sin()、np.cos()
+
+9. 三种求和 
+		1)np.sum(x) 将矩阵x的所有元素相加求和
+		2)np.sum(x, axis=0) 将矩阵按列求和
+		3)np.sum(x, axis=1) 将矩阵按行求和
+
+10. 三种平均数
+		1)np.mean(x) 将矩阵x的所有元素相加求和后求平均
+		2)np.sum(x, axis=0) 将矩阵按列求和，再求平均
+		3)np.sum(x, axis=1) 将矩阵按行求和，再求平均
+		
+	plt.
+	类似的函数还有：求最大值np.argmax(x, *axis)
+	
+11. 画图：import matplotlib.pyplot as plt
+	画y=f(x)的图像： plt.plot(x,y)
+	
