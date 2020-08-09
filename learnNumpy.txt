@@ -32,4 +32,50 @@
 	
 11. 画图：import matplotlib.pyplot as plt
 	画y=f(x)的图像： plt.plot(x,y)
+	帮助显示中文、负号 ：
+		mpl.rcParams['font.sans-serif'] = ['SimHei']
+
+		mpl.rcParams['axes.unicode_minus']=False
 	
+	点格做图：
+		np.mgrid[start:end:step]
+		若步长为复数，表示点数，左闭右闭
+		若步长为实数，表示间隔，左闭右开
+	
+	
+12. numpy生成随机数
+	np.random.seed(1234) #设置随机种子为1234
+	np.random.rand(a,b) #产生a行b列均匀分布随机数组
+	np.random.randn(a,b) #a行b列正态分布随机数据
+	numpy打乱数据
+	numpy.random.shuffle(data)
+	
+13. numpy扩充维度
+	np.expand_dims(array, axis=0/1/2...)
+
+14. numpy 矩阵连接
+	np.stack(array, axis) 等同于concatenate
+	np.hstack相当于默认axis = 1，np.vstack相当于默认axis = 0
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
