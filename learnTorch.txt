@@ -1,0 +1,183 @@
+﻿1. 绘制简单的三层神经网络
+	1） 初始化一个变量作为绘图的底板 dense = nx.Graph
+	2） 构建若干字典变量作为每层点的数目：inputs、activations、outputs
+	3） 不断用两层循环向底板中加边 dense.add_edge(input, activation)
+	4） 绘制点：nx.draw_networkx_nodes(dense , all , nodelist = all.keys() , node_color = node_col)
+	5） 绘制边：nx.draw_networkx_edges(dense , all  , edge_color = edge_col)
+
+例：
+import networkx as nx
+
+def create_neural_network(inputs = 4 , activations = 4 , outputs = 3 , node_col = 'g' , edge_col = 'y'):
+    # max number of nodes in Graph are 50
+    dense  = nx.Graph()
+    # input layer  , activation layer , output layer in neural network 
+    inputs = {i: (0,i) for i in range(0,inputs)}
+    activations = {i+50 : (1,i) for i in range(0,activations)}
+    outputs = {i+100 : (2,i) for i in range(0,outputs)}
+    all = {**inputs , **activations , **outputs}
+    for input in inputs:
+        for activation in activations:
+            dense.add_edge(input , activation)
+    for activation in activations:
+        for output in outputs:
+            dense.add_edge(activation, output)
+    nx.draw_networkx_nodes(dense , all , nodelist = all.keys() , node_color = node_col)
+    nx.draw_networkx_edges(dense , all  , edge_color = edge_col)
+    axes = plt.axis('off')
+
+------------------------------------------------------------------------------------------------------------
+
+2. 用torch创建神经网络
+	1） 用rand函数创建一定尺寸的随机数：inputs =  torch.rand(1,1,64,64)
+	2） 用torch.nn.Sequential函数对各层进行初始化
+	3） 运用搭建好的model对inputs进行简单的预测
+
+例：
+	#Creating Simple Neural Netwok 
+	inputs = torch.rand(1,1,64,64)
+	print(inputs.shape ,'\n',inputs)  # (1,1,64,64)
+	outputs = torch.rand(1,2)
+	print(outputs.shape , '\n' , outputs) #(1,2)
+	# Creating Linear Sequential Model 
+	model = torch.nn.Sequential(
+				torch.nn.Linear(64,256),
+				torch.nn.Linear(256,256),
+				torch.nn.Linear(256,2)
+			)
+	result = model(inputs)
+	print('Prediction shape is ' , result.shape ) #(1,1,64,2)
+
+------------------------------------------------------------------------------------------------------------
+
+3. 训练NN
+	在（上文）已经创建的NN的基础上，进行如下训练方法：
+	1） 首先运用torch.nn.MSELoss()函数对result、outputs求均方误差
+	2） 然后用内置函数zero_grad求梯度
+	3） 根据学习率和梯度更新参数（例子中的for循环）
+	4） 再次预测
+	
+	
+例：	
+	loss = torch.nn.MSELoss()(result,outputs)
+	print("Mean Square Error is ", loss )  #0.439
+	model.zero_grad()
+	loss.backward()
+	learning_rate = 0.01
+	for parameter in model.parameters():
+		parameter.data -= parameter.grad.data * learning_rate
+	after_result = model(inputs)
+	print("Mean Square Error is ", torch.nn.MSELoss()(after_result,outputs)) #0.396
+
+------------------------------------------------------------------------------------------------------------
+
+4. 封装类Model以方便调用
+	首先应封装NN的初始构建函数：
+		1）对于多层NN，要调用上层初始化函数
+		2）然后逐层设定神经元个数和激活函数
+		
+	例：
+	class Model(torch.nn.Module):
+		def __init__(self):
+			super().__init__()# for multiple inheritence super is used
+			self.layer_one = torch.nn.Linear(64,256)
+			self.activation_one = torch.nn.ReLU()
+			self.layer_two = torch.nn.Linear(256,256)
+			self.activation_two = torch.nn.ReLU()
+			self.shape_outputs = torch.nn.Linear(64*256 , 2)
+	
+	然后封装训练函数：
+		1）逐层训练
+		2）在输出前，将数据从起始维度start_dim到end_dim相乘，再进行最后一次变换（？）
+		
+	例：
+		def forward(self, inputs):
+			buffer = self.layer_one(inputs)
+			buffer = self.activation_one(buffer)
+			buffer = self.layer_two(buffer)
+			buffer = self.activation_two(buffer)
+			
+			buffer = buffer.flatten(start_dim = 1)
+			
+			return self.shape_outputs(buffer)
+	
+	我们可以用封装好的Model类实例化一个模型，进行简单的预测：
+	
+	例：
+		model = Model()
+		test_results = model(inputs)
+		print('Test Results are -> ',test_results) # 预测为[[ 0.0019, -0.0117]]
+		print('Outputs are -> ',outputs)		# 真正的结果为：([[0.6872, 0.7741]])
+
+------------------------------------------------------------------------------------------------------------
+
+5. 详细的优化
+	上文只进行了一次梯度下降，实际上可能有多次，并采取提前终止的方法
+	1）调用库函数定义loss_function和optimizer
+	2）循环若干次，每一次都计算预测、计算loss、反传、更新梯度
+	3）计算梯度之和，判断是否小于停止条件
+	
+	例：
+		loss_function = torch.nn.MSELoss()
+		optimizer = torch.optim.SGD(model.parameters() , lr=0.01)
+		
+		for i in range(10000):
+			optimizer.zero_grad()
+			results = model(inputs)
+			loss = loss_function(results , outputs)
+			loss.backward()
+			optimizer.step()
+			gradients = 0.0
+			# Looking for vanishing point
+			for parameter in model.parameters():
+				gradients += parameter.grad.data.sum()
+			if abs(gradients) <= 0.0001:
+				print(gradients)
+				print('Gradient Vanished at iterations {0}'.format(i)) # 1.92e-6
+				break
+	
+	在修正了优化算法的情况下，预测输出和实际标签达到完美重合
+
+
+
+
+
+. 画图
+	1） 初始化x
+	2） 指定图的排列方式m*n
+	3） 运用subplot、plot函数进行画图
+
+例：
+	x = torch.range(-1,1,0.1) # X values for input
+	graph_x = 2 ; graph_y = 3 # Parameter for Graph
+	plt.figure(figsize=(16,10)) # Figure Size
+	plt.subplot(graph_x,graph_y,1);y = torch.nn.functional.softplus(x);plt.title('Softplus');plt.plot(x.numpy() , y.numpy())
+	plt.subplot(graph_x,graph_y,2);y = torch.nn.functional.relu(x);plt.title('Relu');plt.plot(x.numpy() , y.numpy())
+
+
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

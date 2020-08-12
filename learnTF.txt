@@ -1,0 +1,20 @@
+﻿1. reduce_sum
+	reduce_sum() 用于计算张量tensor沿着某一维度的和，可以在求和后降维。
+	如：tf.reduce_sum(array, axis = blabla, (a,b))
+	
+	类似的还有reduce_mean、reduce_max、reduce_all、reduce_any
+	
+2. tt.math.exp(x) 计算e的x次幂
+	tf.nn.log(x) 计算x的自然对数
+
+3. tf.nn.softmax(x)
+	tf.nn.sigmoid(x)
+	
+	tf.nn.softmax_cross_entropy_with_logits(label, data) 计算交叉熵
+
+4. tf.Variable(value) 生成变量
+
+5. 生成随机数
+	tf.random.normal(shape,mean=0.0,stddev=1.0,dtype=tf.float32,seed=None,name=None)
+	
+6. 和numpy一样，tf中的*表示对应位置相乘，tf.matmul 才是矩阵乘

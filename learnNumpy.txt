@@ -57,6 +57,16 @@
 	np.stack(array, axis) 等同于concatenate
 	np.hstack相当于默认axis = 1，np.vstack相当于默认axis = 0
 		
+15. SVM初始化核时，可以这样写
+	def __init__(self,kernel:"kernel='linear'(线性核) or 'poly'(多项式核) or 'sigmoid'(logistic核) or 'rbf'(高斯核)"='linear'):
+	这样在初始化时可以简单写为：
+	svm1 = SVM('linear')
+	
+	同理，对于要读取不同分布类型的数据，如linear、poly等，也可以写
+	def my_load_data(cat:'str = kernel or linear or multi'='kernel')
+	
+	读入时也写为：
+	my_load_data('kernel')
 
 
 
