@@ -1,4 +1,7 @@
-﻿1. 绘制简单的三层神经网络
+﻿
+第一部分：基础知识（绘制神经网络图、搭建和训练网络、绘画数据图）
+
+1. 绘制简单的三层神经网络
 	1） 初始化一个变量作为绘图的底板 dense = nx.Graph
 	2） 构建若干字典变量作为每层点的数目：inputs、activations、outputs
 	3） 不断用两层循环向底板中加边 dense.add_edge(input, activation)
@@ -138,11 +141,9 @@ def create_neural_network(inputs = 4 , activations = 4 , outputs = 3 , node_col 
 	
 	在修正了优化算法的情况下，预测输出和实际标签达到完美重合
 
+------------------------------------------------------------------------------------------------------------
 
-
-
-
-. 画图
+6. 画图
 	1） 初始化x
 	2） 指定图的排列方式m*n
 	3） 运用subplot、plot函数进行画图
@@ -154,22 +155,146 @@ def create_neural_network(inputs = 4 , activations = 4 , outputs = 3 , node_col 
 	plt.subplot(graph_x,graph_y,1);y = torch.nn.functional.softplus(x);plt.title('Softplus');plt.plot(x.numpy() , y.numpy())
 	plt.subplot(graph_x,graph_y,2);y = torch.nn.functional.relu(x);plt.title('Relu');plt.plot(x.numpy() , y.numpy())
 
+------------------------------------------------------------------------------------------------------------
 
+第二部分 实际问题应用
+
+一. 分类问题
+1. 封装dataset类
+	包括下载数据、查询数据长度、划分特征和标签、分割训练集和学习集等
 	
+class MushRoomDataset(Dataset):
+    def __init__(self):
+        self.data = pd.read_csv('/kaggle/input/mushroom-classification/mushrooms.csv')
+    def __len__():
+        return len(self.data)
+    def __getitem__(self , idx):
+        if type(idx) is torch.Tensor:
+            idx = idx.item()
+        return self.data.iloc[idx][1:] , self.data.iloc[idx][0:1]
+    def sample(self , samples = 5 , transverse = False):
+        if transverse:
+            display(self.data.sample(samples)).T
+        else:
+            display(self.data.sample(samples)) 
+    def test_data(self , per_cen = 0.05 , shuffle = True):
+        number_of_testing = int(len(self.data) * per_cen)
+        number_of_training = len(self.data) - number_of_testing
+        train,test = torch.utils.data.random_split(self.data , [number_of_training , number_of_testing])
+        return train,test
+
+1.生成类的模板
+class net_name(nn.Module):
+    def __init__(self):
+        super(net_name,self).__init__()
+        # 可以添加子网络
+        self.conv1 = nn.Conv2d(3,10,3)
+        # 具体每种层的参数可以查看文档
+
+    def forward(self, x):
+        # 定向前传播
+        out = self.conv1(x)
+        return out
+
+2. nn.embeding(m,n)
+	对m个数据提取n个特征，常用于NLP
+
+3. index_select(变量, 搜索方式=0/1, 行号或列号的tensor) 其中0表示按行搜索，1表示按列搜索
+e.g. 
+a = torch.linspace(1, 12, steps=12).view(3, 4)
+print(a)                                              # [ [1,2,3,4] ,[5,6,7,8], [9, 10, 11, 12] ]
+b = torch.index_select(a, 0, torch.tensor([0, 2]))
+print(b)                                              # [ [1,2,3,4], [9, 10, 11, 12] ]
+   
+c = torch.index_select(a, 1, torch.tensor([1, 3]))    
+print(c)											  # [ [2, 6, 10], [4, 8, 12] ]
+
+print(a.index_select(0, torch.tensor([0, 2])))        # 也可自己调用，结果与b相同
+
+4. type_as函数
+格式：tensor1.type_as(tensor2) 将tensor1的内容转换tensor2的数据类型，注意是1变为2
+例：
+tensor1=torch.FloatTensor(4)  # tensor1 [0.0, 0.0, 0.0, 0.0]
+tensor2=torch.IntTensor(3)    # tensor2 [0, 0, 0]
+tensor1=tensor1.type_as(tensor2)  # tensor1 变为整形
+
+5. torch基本操作
+c = torch.tensor(希望的内容，一般是列表) # 根据内容创建tensor
+d = torch.Tensor(m,n) 生成m行n列的随机数矩阵
+
+torch.full([3,3],1)#生成3*3的全为1的矩阵
+torch.full([],1)#生成标量1
+torch.full([2],1)#生成一个长度为2的值全为1的向量
+torch.ones(3,3)
+torch.zeros(3,3)
+torch.eye(3,4)#生成对角为1矩阵，若不是对角矩阵，则多余出用0填充
+torch.eye(3)#3*3对角矩阵
+
+6. squeeze和unsqueeze函数
+	前者用于去除维度为1的维，而后者用于扩充维度，在括号中填写数字指名要操作的维度
+例：	
+x = np.array([[1, 2, 3],[4,5,6]])
+print(x)
+b=torch.from_numpy(x)
+print("b")
+print(b)
+print(b.size())  #torch.Size([2, 3])
+
+c=b.unsqueeze(1)  #在第二维增加一个维度
+print("c")
+print(c)
+print(c.size())   #size = [2,1,3]
 
 
+c=b.unsqueeze(0)  #在第一维增加一个维度
+print("c")
+print(c)
+print(c.size())  #torch.Size([1, 2, 3])
+
+d=c.squeeze(-3)  #用squeeze()函数将第一维去掉 与d=c.squeeze(0)等价
+print("d")
+print(d)
+print(d.size())  # torch.Size([2, 3])
 
 
+e=c.squeeze(-2)  #用squeeze()函数将第二维去掉
+print("e")
+print(e)
+print(e.size())  #torch.Size([1, 2, 3])
+#可以看出维度并没有变化，仍然为（1，2，3），这是因为只有维度为1时才会去掉。
 
+7. expand与expand_as 函数
+前者指定希望扩充成的维度，后者则传入一个变量，用变量的size作为目标维度
 
+>>> a=torch.tensor([[2],[3],[4]])
+>>> print(a.size())
+torch.Size([3, 1])
+>>> a.expand(3,2)
+tensor([[2, 2],
+        [3, 3],
+        [4, 4]])
+>>> a
+tensor([[2],
+        [3],
+        [4]])
+>>> b=torch.tensor([[2,2],[3,3],[5,5]])
+>>> print(b.size())
+torch.Size([3, 2])
+>>> a.expand_as(b)
+tensor([[2, 2],
+        [3, 3],
+        [4, 4]])
+>>> a
+tensor([[2],
+        [3],
+        [4]])
 
+注意，无论是哪个函数都不对原变量进行修改，即a和a.expand、a.expand_as是不共享内存的
 
-
-
-
-
-
-
+8. transpose函数
+交换矩阵对应的维度，如x.size = (3,3,10)
+y = x.transpose(-1,-2)
+y.size = (3, 10, 3)
 
 
 

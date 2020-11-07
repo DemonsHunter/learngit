@@ -44,6 +44,7 @@
 	
 	
 12. numpy生成随机数
+	np.random.random ((a,b)) 生成大小为a,b、0--1之间的随机数
 	np.random.seed(1234) #设置随机种子为1234
 	np.random.rand(a,b) #产生a行b列均匀分布随机数组
 	np.random.randn(a,b) #a行b列正态分布随机数据
